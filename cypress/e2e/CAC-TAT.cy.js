@@ -3,11 +3,11 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         cy.visit("./src/index.html");
     });
 
-    it.only("verifica o título da aplicação", () => {
+    it("verifica o título da aplicação", () => {
         cy.title().should("be.eq", "Central de Atendimento ao Cliente TAT");
     });
 
-    it.only("preenche os campos obrigatórios e envia o formulário", () => {
+    it("preenche os campos obrigatórios e envia o formulário", () => {
         cy.get('[name="firstName"]').type("Tatiana");
         cy.get('[name="lastName"]').type("Motoyama");
         cy.get('[type="email"]').type("tatiana@teste.com");
@@ -16,7 +16,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         cy.get(".success").should("be.visible");
     });
 
-    it.only("exibe mensagem de erro ao submeter o formulário com um email com formatação inválida", () => {
+    it("exibe mensagem de erro ao submeter o formulário com um email com formatação inválida", () => {
         cy.get('[name="firstName"]').type("Tatiana");
         cy.get('[name="lastName"]').type("Motoyama");
         cy.get('[type="email"]').type("tatiana@teste,com");
@@ -25,13 +25,13 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         cy.get(".error").should("be.visible");
     });
 
-    it.only("campo de telefone continua vazio quando preenchido com um valor não-numérico", () => {
+    it("campo de telefone continua vazio quando preenchido com um valor não-numérico", () => {
         cy.get(':nth-child(2) > [name="phone"]')
             .type("abcde")
             .should("not.have.value", "abcde");
     });
 
-    it.only("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
+    it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
         cy.get('[name="firstName"]').type("Tatiana");
         cy.get('[name="lastName"]').type("Motoyama");
         cy.get('[type="email"]').type("tatiana@teste.com");
@@ -41,7 +41,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
         cy.get(".error").should("be.visible");
     });
 
-    it.only("preenche e limpa os campos nome, sobrenome, email e telefone", () => {
+    it("preenche e limpa os campos nome, sobrenome, email e telefone", () => {
         cy.get('[name="firstName"]')
             .type("Tatiana")
             .should("have.value", "Tatiana")
@@ -64,13 +64,25 @@ describe("Central de Atendimento ao Cliente TAT", () => {
             .should("have.value", "");
     });
 
-    it.only("exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios", () => {
+    it("exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios", () => {
         cy.contains("button", "Enviar").click();
         cy.get(".error").should("be.visible");
     });
 
-    it.only("envia o formuário com sucesso usando um comando customizado", () => {
+    it("envia o formuário com sucesso usando um comando customizado", () => {
         cy.fillMandatoryFieldsAndSubmit();
         cy.get(".success").should("be.visible");
+    });
+
+    it("seleciona um produto (YouTube) por seu texto", () => {
+        cy.get("#product").select("YouTube").should("have.value", "youtube");
+    });
+
+    it("seleciona um produto (Mentoria) por seu valor (value)", () => {
+        cy.get("#product").select("mentoria").should("have.value", "mentoria");
+    });
+
+    it.only("seleciona um produto (Blog) por seu índice", () => {
+        cy.get("#product").select(1).should("have.value", "blog");
     });
 });
